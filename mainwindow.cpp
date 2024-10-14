@@ -10,16 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(player.lives));
     ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));
-    gameScene *scene = new gameScene(1586,842);
 
-    // Draw the scene components
-    scene->drawGreeneries();
-    scene->drawRoadBoundaries();
-    scene->drawRoadStrips();
-    ui->gameWindow->setScene(scene);
-    QGraphicsScene *gs = new QGraphicsScene();
-    qDebug()<<ui->gameWindow->height()<<ui->gameWindow->width();
-    ui->gameWindow->setScene(scene);
 }
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
@@ -40,5 +31,30 @@ MainWindow::~MainWindow()
 void MainWindow::on_resetButton_clicked()
 {
 
+}
+
+
+void MainWindow::on_startButton_clicked() {
+    drawGameScene();
+}
+
+void MainWindow::drawGameScene() {
+    int width = ui->gameWindow->viewport()->width();
+    int height = ui->gameWindow->viewport()->height();
+    ui->gameWindow->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->gameWindow->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    gameScene *scene = new gameScene(width, height);
+    ui->gameWindow->setScene(scene);
+
+    // Draw the scene components
+    scene->drawGreeneries();
+    scene->drawRoadBoundaries();
+    scene->drawRoadStrips();
+    base = scene;
+}
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    QMainWindow::resizeEvent(event);
+    drawGameScene();
 }
 

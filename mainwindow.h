@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 #include "entities.h"
-#include "qgraphicsscene.h"
+#include "gamescene.h"
 QT_BEGIN_NAMESPACE
 
 
@@ -24,12 +24,18 @@ public:
 
     MainPlayer player;
     // QGraphicsScene base;
+    gameScene* base;
+    void drawGameScene();
+
 
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 private slots:
     void on_resetButton_clicked();
+
+    void on_startButton_clicked();
 
 private:
     Ui::MainWindow *ui;
