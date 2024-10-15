@@ -39,20 +39,30 @@ void MainWindow::on_startButton_clicked() {
 }
 
 void MainWindow::drawGameScene() {
+    // Get the width and height of the QGraphicsView's viewport
     int width = ui->gameWindow->viewport()->width();
     int height = ui->gameWindow->viewport()->height();
+
+    // Set scroll bars policy to always off
     ui->gameWindow->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->gameWindow->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    // Create a new gameScene instance and set its dimensions
     gameScene *scene = new gameScene(width, height);
     ui->gameWindow->setScene(scene);
+
+    // Set the scene rect to match the viewport size
+    scene->setSceneRect(0, 0, width, height);
 
     // Draw the scene components
     scene->drawGreeneries();
     scene->drawRoadBoundaries();
     scene->drawRoadStrips();
-    base = scene;
+
+    // Optionally store the scene if you need to access it later
+    base = scene; // Ensure base is a member variable in MainWindow
 }
+
 void MainWindow::resizeEvent(QResizeEvent *event) {
     QMainWindow::resizeEvent(event);
     drawGameScene();

@@ -53,7 +53,7 @@ void gameScene::drawRoadStrips() {
     QPen dashedPen(Qt::white, dividerWidth);
     dashedPen.setStyle(Qt::DashLine);
 
-    dashedPen.setDashPattern(QVector<qreal>() << 3 << 4);
+    dashedPen.setDashPattern(QVector<qreal>() << 5 << 4);
 
     addLine(dividerLeftX, 0, dividerLeftX, sceneHeight, dashedPen);
 
