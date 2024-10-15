@@ -1,6 +1,8 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
-
+#include<QFloat16>
+#include <QVariant>
+// #include "qtypes.h"
 #include "qgraphicsscene.h"
 
 class gameScene: public QGraphicsScene
