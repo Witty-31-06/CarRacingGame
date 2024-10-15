@@ -2,8 +2,8 @@
 #include "qdebug.h"
 
 gameScene::gameScene(int w, int h) {
-    laneDividerFraction = 0.05;
-    laneFraction =  0.1;
+    laneDividerFraction = 0.01;
+    laneFraction =  0.13;
     greeneriesFraction = 0.3;
     sceneHeight = h;
     sceneWidth = w;
@@ -48,5 +48,16 @@ void gameScene::drawRoadStrips() {
     int dividerWidth = laneDividerFraction*sceneWidth;
 
     int dividerLeftX = roadBoundaryLeft + laneWidth + dividerWidth/2;
-    // addLine(dividerLeftX, 0, dividerLeftX, sceneHeight-, QPen(Qt::white, dividerWidth));
+    int dividerRightX = roadBoundaryRight - (laneWidth + dividerWidth / 2);
+
+    QPen dashedPen(Qt::white, dividerWidth);
+    dashedPen.setStyle(Qt::DashLine);
+
+    dashedPen.setDashPattern(QVector<qreal>() << 3 << 4);
+
+    addLine(dividerLeftX, 0, dividerLeftX, sceneHeight, dashedPen);
+
+    addLine(dividerRightX, 0, dividerRightX, sceneHeight, dashedPen);
 }
+
+
