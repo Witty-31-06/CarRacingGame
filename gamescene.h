@@ -19,6 +19,7 @@ public:
     void drawRoadBoundaries();
     void drawRoadStrips();
     void drawGreeneries();
+    void addImage(const QString &filePath, int x, int y);
 };
 
 #endif // GAMESCENE_H

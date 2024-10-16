@@ -1,5 +1,6 @@
 #include "gamescene.h"
 #include "qdebug.h"
+#include <QGraphicsPixmapItem>
 
 gameScene::gameScene(int w, int h) {
     laneDividerFraction = 0.01;
@@ -58,6 +59,26 @@ void gameScene::drawRoadStrips() {
     addLine(dividerLeftX, 0, dividerLeftX, sceneHeight, dashedPen);
 
     addLine(dividerRightX, 0, dividerRightX, sceneHeight, dashedPen);
+}
+
+void gameScene::addImage(const QString &filePath, int x, int y) {
+    // Load the PNG image into a QPixmap
+    QPixmap pixmap(filePath);
+
+    // Check if the pixmap loaded successfully
+    if (pixmap.isNull()) {
+        qDebug() << "Failed to load image: " << filePath;
+        return;
+    }
+
+    // Create a QGraphicsPixmapItem to hold the image
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap);
+
+    // Set the position of the item (x, y)
+    item->setPos(x, y);
+
+    // Add the item to the scene
+    addItem(item);
 }
 
 

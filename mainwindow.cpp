@@ -36,6 +36,8 @@ void MainWindow::on_resetButton_clicked()
 
 void MainWindow::on_startButton_clicked() {
     drawGameScene();
+    base->addImage(":/images/assets/main_car.png", 100,100);
+    ui->gameWindow->setScene(base);
 }
 
 void MainWindow::drawGameScene() {
