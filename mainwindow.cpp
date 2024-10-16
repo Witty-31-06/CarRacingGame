@@ -5,8 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    MainPlayer player;
-
+    player = MainPlayer("hola");
     ui->setupUi(this);
     ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(player.lives));
     ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));

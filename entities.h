@@ -2,13 +2,15 @@
 #define ENTITIES_H
 
 #include "qtypes.h"
+#include <QString>
+#include <QPixmap>
 enum CarLanes {
     LANE_LEFT,
     LANE_CENTER,
     LANE_RIGHT
 };
 
-class Entity {
+class Entity : public QPixmap{
 public:
     int xmin;
     int ymin;
@@ -16,15 +18,16 @@ public:
     int ymax;
     int ylen;
     int xlen;
-    Entity();
+    QString path;
+    Entity(QString);
 };
 
 class Obstacles : public Entity {
-
+    Obstacles(QString);
 };
 
 class Greeneries : public Entity {
-
+    Greeneries(QString);
 };
 
 class MainPlayer : public Entity {
@@ -33,11 +36,7 @@ public:
     qint8 lives;
     quint64 score;
 
-    MainPlayer() {
-        lives = 3;
-        score = 0;
-        laneNo = LANE_CENTER;  // Default lane
-    }
+    MainPlayer(QString);
 };
 
 #endif // ENTITIES_H

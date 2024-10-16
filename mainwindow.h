@@ -22,8 +22,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    MainPlayer player;
-    // QGraphicsScene base;
+    MainPlayer player = MainPlayer("Hello");
+    QList<Entity> entities;
     gameScene* base;
     void drawGameScene();
 
