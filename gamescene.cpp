@@ -41,8 +41,6 @@ gameScene::gameScene(int w, int h, int fps, QList<Entity *> q) {
 
 
 
-
-
 }
 void gameScene::drawGreeneries() {
     // Calculate scene width and height
@@ -119,9 +117,16 @@ void gameScene::renderObstacles() {
 
     if (spawnCountdown <= 0) {
         int obstacleCount = QRandomGenerator::global()->bounded(1, 3);
-        for (int i = 0; i < obstacleCount; i++) {
-            Region lanes[] = {LANE_LEFT, LANE_CENTER, LANE_RIGHT};
-            Region lane = lanes[QRandomGenerator::global()->bounded(0, 3)];
+        Region lanes[] = {LANE_LEFT, LANE_CENTER, LANE_RIGHT};
+
+        // Shuffle the lanes array
+        std::shuffle(std::begin(lanes), std::end(lanes),
+                     std::default_random_engine(QRandomGenerator::global()->generate()));
+
+        // Ensure we do not exceed the number of lanes
+        int maxObstacles = std::min(obstacleCount, static_cast<int>(std::size(lanes)));
+        for (int i = 0; i < maxObstacles; i++) {
+            Region lane = lanes[i];
 
             Entity* entity = entities[QRandomGenerator::global()->bounded(entities.size())];
 
