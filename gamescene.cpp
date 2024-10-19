@@ -1,6 +1,7 @@
 #include "gamescene.h"
 
 #include <QGraphicsPixmapItem>
+#include <QRandomGenerator>
 
 gameScene::gameScene(int w, int h, int fps, QList<Entity *> q) {
     entities = q;
@@ -112,3 +113,51 @@ void gameScene::renderMainCar(MainPlayer& player) {
         addItem(car);
     }
 }
+
+void gameScene::renderObstacles() {
+    static int spawnCountdown = 0;
+
+    if (spawnCountdown <= 0) {
+        int obstacleCount = QRandomGenerator::global()->bounded(1, 3);
+        for (int i = 0; i < obstacleCount; i++) {
+            Region lanes[] = {LANE_LEFT, LANE_CENTER, LANE_RIGHT};
+            Region lane = lanes[QRandomGenerator::global()->bounded(0, 3)];
+
+            Entity* entity = entities[QRandomGenerator::global()->bounded(entities.size())];
+
+            Obstacles* obstacle = static_cast<Obstacles*>(entity);
+
+            QGraphicsPixmapItem* obstaclePixmap = obstacle->getPixmap();
+
+            obstaclePixmap->setPos(map[lane], -100);
+
+            if (!obstaclePixmap->scene()) {
+                addItem(obstaclePixmap);
+            }
+
+            activeObstacles.append(obstacle);
+        }
+
+        spawnCountdown = fps * 2;
+    }
+
+    spawnCountdown--;
+
+    for (int i = 0; i < activeObstacles.size(); ++i) {
+        Obstacles* obstacle = activeObstacles[i];
+        QGraphicsPixmapItem* obstaclePixmap = obstacle->getPixmap();
+
+        qreal newY = obstaclePixmap->y() + displacement_per_frame;
+        obstaclePixmap->setPos(obstaclePixmap->x(), newY);
+
+        if (newY > sceneHeight) {
+            removeItem(obstaclePixmap);
+
+            activeObstacles.removeAt(i);
+            i--;
+        }
+    }
+}
+
+
+

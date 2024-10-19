@@ -11,10 +11,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     /**resources**/
     // entities.append(Entity());
-    entities.append(Obstacles(":/car_game/pink_car.png"));
-    entities.append(Obstacles(":/car_game/red_car.png"));
-    entities.append(Obstacles(":/car_game/white_car.png"));
-    entities.append(Obstacles(":/car_game/yellow_car.png"));
+    entities.append(new Obstacles(":/car_game/pink_car.png"));
+    entities.append(new Obstacles(":/car_game/red_car.png"));
+    entities.append(new Obstacles(":/car_game/white_car.png"));
+    entities.append(new Obstacles(":/car_game/yellow_car.png"));
 
 
 
@@ -45,7 +45,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         }
 
     }
-    else if (event->key() == Qt::Key_S) {
+    else if (event->key() == Qt::Key_D) {
         switch(player.laneNo) {
         case LANE_CENTER:
         case LANE_RIGHT:
@@ -86,7 +86,7 @@ void MainWindow::drawGameScene() {
     ui->gameWindow->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Create a new gameScene instance and set its dimensions
-    gameScene *scene = new gameScene(width, height, fps);
+    gameScene *scene = new gameScene(width, height, fps,entities);
     ui->gameWindow->setScene(scene);
 
     // Set the scene rect to match the viewport size
@@ -106,7 +106,7 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 void MainWindow::game_loop() {
 
     base->renderMainCar(player);
-    // base->renderObstacles();
+    base->renderObstacles();
     // base->renderGreeneries();
 
     ui->gameWindow->setScene(base);

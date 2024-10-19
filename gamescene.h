@@ -27,7 +27,7 @@ private:
     quint32 speed;
 public:
 
-    gameScene(int w, int h, int fps);
+    gameScene(int w, int h, int fps, QList<Entity *> q);
     void drawRoadBoundaries();
     void drawRoadStrips();
     void drawGreeneries();

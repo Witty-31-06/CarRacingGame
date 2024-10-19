@@ -24,7 +24,7 @@ public:
     ~MainWindow();
 
     MainPlayer player;
-    QList<Entity> entities;
+    QList<Entity *> entities;
     gameScene* base;
     void drawGameScene();
     void game_loop();

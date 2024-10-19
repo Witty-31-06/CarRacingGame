@@ -2,7 +2,7 @@
 #define ENTITIES_H
 
 
-#include "qtypes.h"
+//#include "qtypes.h"
 #include <QString>
 #include <QGraphicsPixmapItem>
 enum Region {
