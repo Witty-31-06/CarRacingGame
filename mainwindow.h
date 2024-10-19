@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QKeyEvent>
+#include <QTimer>
 #include "entities.h"
 #include "gamescene.h"
 QT_BEGIN_NAMESPACE
@@ -22,10 +23,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    MainPlayer player = MainPlayer("Hello");
+    MainPlayer player;
     QList<Entity> entities;
     gameScene* base;
     void drawGameScene();
+    void game_loop();
 
 
 
@@ -39,6 +41,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QTimer* timer;
+
     // bool eventFilter(QObject *object, QEvent *event);
 };
 #endif // MAINWINDOW_H

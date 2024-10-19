@@ -1,6 +1,10 @@
 #include "entities.h"
 
-Entity::Entity(QString path) :QPixmap(path){
+Entity::Entity(QString path) {
+    QPixmap pic = QPixmap(path);
+    image = new QGraphicsPixmapItem(pic);
+    xlen = pic.width();
+    this->ylen = pic.height();
 
 };
 MainPlayer::MainPlayer(QString path) : Entity(path){

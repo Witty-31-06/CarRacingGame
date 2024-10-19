@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>car_game/yellow_car.png</file>
+        <file>car_game/white_car.png</file>
+        <file>car_game/red_car.png</file>
+        <file>car_game/pink_car.png</file>
+        <file>car_game/main_car.png</file>
+    </qresource>
+</RCC>

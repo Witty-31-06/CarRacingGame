@@ -1,38 +1,49 @@
 #ifndef ENTITIES_H
 #define ENTITIES_H
 
+
 #include "qtypes.h"
 #include <QString>
-#include <QPixmap>
-enum CarLanes {
+#include <QGraphicsPixmapItem>
+enum Region {
     LANE_LEFT,
     LANE_CENTER,
-    LANE_RIGHT
+    LANE_RIGHT,
+    OUTSIDE_ROAD
 };
 
-class Entity : public QPixmap{
+class Entity {
 public:
-    int xmin;
-    int ymin;
-    int xmax;
-    int ymax;
-    int ylen;
-    int xlen;
+    QPoint coords;
+    quint32 xmin;
+    quint32 ymin;
+    quint32 xmax;
+    quint32 ymax;
+    quint32 ylen;
+    quint32 xlen;
+    Region laneNo;
     QString path;
+    QGraphicsPixmapItem *image;
     Entity(QString);
+
+    inline QGraphicsPixmapItem* getPixmap() {
+        return image;
+    }
 };
 
 class Obstacles : public Entity {
+public:
     Obstacles(QString);
 };
 
 class Greeneries : public Entity {
+public:
     Greeneries(QString);
 };
 
 class MainPlayer : public Entity {
 public:
-    CarLanes laneNo;
+
     qint8 lives;
     quint64 score;
 
