@@ -112,35 +112,40 @@ void gameScene::renderMainCar(MainPlayer& player) {
     }
 }
 
-void gameScene::renderObstacles() {
+void gameScene::spawnObstacleInLane(Region lane) {
+    Entity* entity = entities[QRandomGenerator::global()->bounded(entities.size())];
+    Obstacles* obstacle = static_cast<Obstacles*>(entity);
+    QGraphicsPixmapItem* obstaclePixmap = obstacle->getPixmap();
+
+    obstaclePixmap->setPos(map[lane] - 65, -100);
+
+    if (!obstaclePixmap->scene()) {
+        addItem(obstaclePixmap);
+    }
+
+    activeObstacles.append(obstacle);
+}
+void gameScene::renderObstacles(MainPlayer &player) {
     static int spawnCountdown = 0;
 
     if (spawnCountdown <= 0) {
-        int obstacleCount = QRandomGenerator::global()->bounded(1, 3);
         Region lanes[] = {LANE_LEFT, LANE_CENTER, LANE_RIGHT};
+        Region playerLane = player.laneNo;
 
-        // Shuffle the lanes array
-        std::shuffle(std::begin(lanes), std::end(lanes),
+        std::vector<Region> remainingLanes;
+        for (Region lane : lanes) {
+            if (lane != playerLane) {
+                remainingLanes.push_back(lane);
+            }
+        }
+
+        std::shuffle(remainingLanes.begin(), remainingLanes.end(),
                      std::default_random_engine(QRandomGenerator::global()->generate()));
 
-        // Ensure we do not exceed the number of lanes
-        int maxObstacles = std::min(obstacleCount, static_cast<int>(std::size(lanes)));
-        for (int i = 0; i < maxObstacles; i++) {
-            Region lane = lanes[i];
+        spawnObstacleInLane(playerLane);
 
-            Entity* entity = entities[QRandomGenerator::global()->bounded(entities.size())];
-
-            Obstacles* obstacle = static_cast<Obstacles*>(entity);
-
-            QGraphicsPixmapItem* obstaclePixmap = obstacle->getPixmap();
-
-            obstaclePixmap->setPos(map[lane], -100);
-
-            if (!obstaclePixmap->scene()) {
-                addItem(obstaclePixmap);
-            }
-
-            activeObstacles.append(obstacle);
+        if (QRandomGenerator::global()->bounded(2) == 1) {
+            spawnObstacleInLane(remainingLanes[0]);
         }
 
         spawnCountdown = fps * 2;
@@ -157,12 +162,15 @@ void gameScene::renderObstacles() {
 
         if (newY > sceneHeight) {
             removeItem(obstaclePixmap);
-
             activeObstacles.removeAt(i);
             i--;
         }
     }
 }
+
+
+
+
 
 
 

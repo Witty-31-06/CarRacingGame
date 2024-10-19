@@ -19,8 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-
-
     ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(player.lives));
     ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));
 
@@ -106,7 +104,7 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 void MainWindow::game_loop() {
 
     base->renderMainCar(player);
-    base->renderObstacles();
+    base->renderObstacles(player);
     // base->renderGreeneries();
 
     ui->gameWindow->setScene(base);

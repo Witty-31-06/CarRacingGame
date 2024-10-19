@@ -33,8 +33,9 @@ public:
     void drawGreeneries();
     void addImage(const QString &filePath, int x, int y);
     void renderMainCar(MainPlayer&);
-    void renderObstacles();
+    void renderObstacles(MainPlayer &);
     void renderGreeneries();
+    void spawnObstacleInLane(Region lane);
 };
 
 #endif // GAMESCENE_H
