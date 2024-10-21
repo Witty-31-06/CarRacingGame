@@ -24,7 +24,7 @@ public:
     ~MainWindow();
 
     MainPlayer player;
-    QList<Entity *> entities;
+    QVector<QPixmap> entities;
     gameScene* base;
     void drawGameScene();
     void game_loop();
@@ -42,7 +42,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QTimer* timer;
-
+    QTimer *spawnTimer;
     // bool eventFilter(QObject *object, QEvent *event);
 };
 #endif // MAINWINDOW_H

@@ -19,23 +19,21 @@ private:
     quint32 displacement_per_frame;
     uint fps;
     quint16 sceneHeight;
-    QList<Entity*> entities;  // List of available entities
-    QTimer* spawnTimer;  // Timer to spawn obstacles
-    QTimer* moveTimer;  // Timer to move obstacles
-    QList<Obstacles*> activeObstacles;  // List of currently spawned obstacles
+    QList<QPixmap> entities;  // List of available entities
+    QList<Obstacles *> activeObstacles;  // List of currently spawned obstacles
     QHash<Region, quint32> map;
     quint32 speed;
 public:
 
-    gameScene(int w, int h, int fps, QList<Entity *> q);
+    gameScene(int w, int h, int fps, QList<QPixmap> q);
     void drawRoadBoundaries();
     void drawRoadStrips();
     void drawGreeneries();
     void addImage(const QString &filePath, int x, int y);
     void renderMainCar(MainPlayer&);
-    void renderObstacles(MainPlayer &);
+    void renderObstacles();
     void renderGreeneries();
-    void spawnObstacleInLane(Region lane);
+    void spawnObstacle();
 };
 
 #endif // GAMESCENE_H

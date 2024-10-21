@@ -9,12 +9,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     /**resources**/
     // entities.append(Entity());
-    entities.append(new Obstacles(":/car_game/pink_car.png"));
-    entities.append(new Obstacles(":/car_game/red_car.png"));
-    entities.append(new Obstacles(":/car_game/white_car.png"));
-    entities.append(new Obstacles(":/car_game/yellow_car.png"));
+    entities.emplaceBack(":/car_game/pink_car.png");
+    entities.emplaceBack(":/car_game/red_car.png");
+    entities.emplaceBack(":/car_game/white_car.png");
+    entities.emplaceBack(":/car_game/yellow_car.png");
 
 
 
@@ -40,6 +41,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         case LANE_RIGHT:
             player.laneNo = LANE_CENTER;
             break;
+        default:
+            break;
         }
 
     }
@@ -51,6 +54,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             break;
         case LANE_LEFT:
             player.laneNo = LANE_CENTER;
+            break;
+        default:
             break;
         }
     }
@@ -70,8 +75,12 @@ void MainWindow::on_resetButton_clicked()
 void MainWindow::on_startButton_clicked() {
     drawGameScene();
     timer = new QTimer(this);
+    spawnTimer = new QTimer(this);
+
     connect(timer, &QTimer::timeout, this, &MainWindow::game_loop);
+    connect(spawnTimer, &QTimer::timeout, base, &gameScene::spawnObstacle);
     timer->start(1000/fps);
+    spawnTimer->start(2000);
     ui->gameWindow->setScene(base);
 }
 
@@ -104,7 +113,7 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 void MainWindow::game_loop() {
 
     base->renderMainCar(player);
-    base->renderObstacles(player);
+    base->renderObstacles();
     // base->renderGreeneries();
 
     ui->gameWindow->setScene(base);

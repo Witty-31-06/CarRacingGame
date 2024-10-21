@@ -3,7 +3,8 @@
 #include <QGraphicsPixmapItem>
 #include <QRandomGenerator>
 
-gameScene::gameScene(int w, int h, int fps, QList<Entity *> q) {
+
+gameScene::gameScene(int w, int h, int fps, QList<QPixmap> q) {
     entities = q;
     laneDividerFraction = 0.01;
     laneFraction =  0.13;
@@ -104,7 +105,6 @@ void gameScene::renderMainCar(MainPlayer& player) {
     {
 
         car->setPos(map[player.laneNo], sceneHeight-300);
-        // addItem(car);
     }
     if(!car->scene())
     {
@@ -112,58 +112,40 @@ void gameScene::renderMainCar(MainPlayer& player) {
     }
 }
 
-void gameScene::spawnObstacleInLane(Region lane) {
-    Entity* entity = entities[QRandomGenerator::global()->bounded(entities.size())];
-    Obstacles* obstacle = static_cast<Obstacles*>(entity);
-    QGraphicsPixmapItem* obstaclePixmap = obstacle->getPixmap();
+void gameScene::spawnObstacle() {
 
-    obstaclePixmap->setPos(map[lane] - 65, -100);
+    //Choosing a random Obstacle
+    qDebug()<<"Inside spawn";
+    QPixmap entity = entities[QRandomGenerator::global()->bounded(entities.size())];
+    Obstacles* obstacle = new Obstacles(entity);
 
-    if (!obstaclePixmap->scene()) {
-        addItem(obstaclePixmap);
-    }
+    //Choosing a random lane
+    Region randomLane = (Region)QRandomGenerator::global()->bounded(3); // 0: LEFT, 1: CENTER, 2: RIGHT
 
+
+    //Choosing random spawn y coords
+    int ycoord = -100 - QRandomGenerator::global()->bounded(50);
+    obstacle->setCoords(QPoint(map[randomLane], ycoord));
     activeObstacles.append(obstacle);
+
 }
-void gameScene::renderObstacles(MainPlayer &player) {
-    static int spawnCountdown = 0;
+void gameScene::renderObstacles() {
 
-    if (spawnCountdown <= 0) {
-        Region lanes[] = {LANE_LEFT, LANE_CENTER, LANE_RIGHT};
-        Region playerLane = player.laneNo;
+    for(auto it = activeObstacles.begin(); it != activeObstacles.end();) {
+        Obstacles* obstacle = *it;
 
-        std::vector<Region> remainingLanes;
-        for (Region lane : lanes) {
-            if (lane != playerLane) {
-                remainingLanes.push_back(lane);
-            }
+        QGraphicsPixmapItem *pic = obstacle->getPixmap();
+        obstacle->moveDown(displacement_per_frame);
+        pic->setPos(obstacle->coords);
+        if(!pic->scene())
+        {
+            addItem(pic);
         }
-
-        std::shuffle(remainingLanes.begin(), remainingLanes.end(),
-                     std::default_random_engine(QRandomGenerator::global()->generate()));
-
-        spawnObstacleInLane(playerLane);
-
-        if (QRandomGenerator::global()->bounded(2) == 1) {
-            spawnObstacleInLane(remainingLanes[0]);
-        }
-
-        spawnCountdown = fps * 2;
-    }
-
-    spawnCountdown--;
-
-    for (int i = 0; i < activeObstacles.size(); ++i) {
-        Obstacles* obstacle = activeObstacles[i];
-        QGraphicsPixmapItem* obstaclePixmap = obstacle->getPixmap();
-
-        qreal newY = obstaclePixmap->y() + displacement_per_frame;
-        obstaclePixmap->setPos(obstaclePixmap->x(), newY);
-
-        if (newY > sceneHeight) {
-            removeItem(obstaclePixmap);
-            activeObstacles.removeAt(i);
-            i--;
+        if(obstacle->isOutOfBounds(sceneHeight)) {
+            removeItem(pic);
+            it = activeObstacles.erase(it);
+        } else {
+            it++;
         }
     }
 }
