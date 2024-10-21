@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "gamescene.h"
+#include <QMessageBox>
 
 #define fps 120
 MainWindow::MainWindow(QWidget *parent)
@@ -12,10 +13,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     /**resources**/
     // entities.append(Entity());
-    entities.emplaceBack(":/car_game/pink_car.png");
-    entities.emplaceBack(":/car_game/red_car.png");
-    entities.emplaceBack(":/car_game/white_car.png");
-    entities.emplaceBack(":/car_game/yellow_car.png");
+    entities.push_back(QPixmap(":/car_game/pink_car.png"));
+    entities.push_back(QPixmap(":/car_game/red_car.png"));
+    entities.push_back(QPixmap(":/car_game/white_car.png"));
+    entities.push_back(QPixmap(":/car_game/yellow_car.png"));
 
 
 
@@ -24,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));
 
 
-
+    base=nullptr;
 }
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
@@ -104,6 +105,9 @@ void MainWindow::drawGameScene() {
     scene->drawRoadStrips();
 
     base = scene;
+
+    connect(base, &gameScene::updateLives, this, &MainWindow::updateLives);
+    connect(base, &gameScene::gameOver, this, &MainWindow::gameOver);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
@@ -113,8 +117,28 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 void MainWindow::game_loop() {
 
     base->renderMainCar(player);
-    base->renderObstacles();
+    base->renderObstacles(player);
     // base->renderGreeneries();
 
+
     ui->gameWindow->setScene(base);
+}
+
+
+void MainWindow::updateLives(int lives) {
+    ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(lives));
+    // if(lives>0)
+    // {
+    //     timer->stop();
+    //     spawnTimer->stop();
+    //     QMessageBox::information(this, "Life Lost", "You have lost a life");
+    //     timer->start();
+    //     spawnTimer->start();
+    // }
+}
+
+void MainWindow::gameOver() {
+    timer->stop();
+    spawnTimer->stop();
+    QMessageBox::information(this, "Game Over", "Lost all your lives");
 }

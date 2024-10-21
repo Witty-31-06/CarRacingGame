@@ -4,7 +4,7 @@
 #include <QRandomGenerator>
 
 
-gameScene::gameScene(int w, int h, int fps, QList<QPixmap> q) {
+gameScene::gameScene(int w, int h, int fps, QVector<QPixmap> q) {
     entities = q;
     laneDividerFraction = 0.01;
     laneFraction =  0.13;
@@ -128,7 +128,7 @@ void gameScene::spawnObstacle() {
     activeObstacles.append(obstacle);
 
 }
-void gameScene::renderObstacles() {
+void gameScene::renderObstacles(MainPlayer &player) {
 
     for(auto it = activeObstacles.begin(); it != activeObstacles.end();) {
         Obstacles* obstacle = *it;
@@ -140,7 +140,20 @@ void gameScene::renderObstacles() {
 
             addItem(pic);
         }
-        if(obstacle->isOutOfBounds(sceneHeight)) {
+
+        if (pic->collidesWithItem(player.getPixmap())) {
+            player.lives -= 1;
+            emit updateLives(player.lives);
+
+            if (player.lives <= 0) {
+                emit gameOver();
+            }
+
+            // Remove the collided obstacle
+            removeItem(pic);
+            it = activeObstacles.erase(it);
+        }
+        else if(obstacle->isOutOfBounds(sceneHeight)) {
             removeItem(pic);
 
             it = activeObstacles.erase(it);

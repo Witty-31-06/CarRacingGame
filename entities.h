@@ -4,6 +4,7 @@
 
 //#include "qtypes.h"
 #include <QString>
+#include <QDebug>
 #include <QGraphicsPixmapItem>
 enum Region {
     LANE_LEFT,
