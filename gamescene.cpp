@@ -12,7 +12,7 @@ gameScene::gameScene(int w, int h, int fps, QList<QPixmap> q) {
     sceneHeight = h;
     sceneWidth = w;
     this->fps = fps;
-    speed = sceneHeight/3.0; //Speed of obstacles in height px/second
+    speed = sceneHeight/2.0; //Speed of obstacles in height px/second
     displacement_per_frame = speed/fps;
 
 
@@ -115,7 +115,6 @@ void gameScene::renderMainCar(MainPlayer& player) {
 void gameScene::spawnObstacle() {
 
     //Choosing a random Obstacle
-    qDebug()<<"Inside spawn";
     QPixmap entity = entities[QRandomGenerator::global()->bounded(entities.size())];
     Obstacles* obstacle = new Obstacles(entity);
 
@@ -133,16 +132,17 @@ void gameScene::renderObstacles() {
 
     for(auto it = activeObstacles.begin(); it != activeObstacles.end();) {
         Obstacles* obstacle = *it;
-
         QGraphicsPixmapItem *pic = obstacle->getPixmap();
         obstacle->moveDown(displacement_per_frame);
         pic->setPos(obstacle->coords);
         if(!pic->scene())
         {
+
             addItem(pic);
         }
         if(obstacle->isOutOfBounds(sceneHeight)) {
             removeItem(pic);
+
             it = activeObstacles.erase(it);
         } else {
             it++;

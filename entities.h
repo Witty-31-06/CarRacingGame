@@ -15,7 +15,7 @@ enum Region {
 class Entity {
 public:
     QPoint coords;
-    quint32 ylen;
+    qint32 ylen;
     quint32 xlen;
     Region laneNo;
     QString path;
@@ -31,11 +31,11 @@ public:
     }
 
     inline bool isOutOfBounds(quint32 sceneHeight) {
-        return coords.y()+ylen/2+10 > sceneHeight;
+        qDebug()<<(coords.y() - ylen)<<sceneHeight;
+        return (coords.y() - ylen) > (qint32)sceneHeight ;
     }
     inline void setCoords(QPoint c) {
         coords = c;
-        qDebug()<<"HEHE";
     }
     ~Entity() {
         delete image;

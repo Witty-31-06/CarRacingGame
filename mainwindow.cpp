@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "gamescene.h"
 
-#define fps 30
+#define fps 120
 MainWindow::MainWindow(QWidget *parent)
     :player(":/car_game/main_car.png"),
     QMainWindow(parent)
@@ -80,7 +80,7 @@ void MainWindow::on_startButton_clicked() {
     connect(timer, &QTimer::timeout, this, &MainWindow::game_loop);
     connect(spawnTimer, &QTimer::timeout, base, &gameScene::spawnObstacle);
     timer->start(1000/fps);
-    spawnTimer->start(2000);
+    spawnTimer->start(1500);
     ui->gameWindow->setScene(base);
 }
 
