@@ -100,14 +100,13 @@ void gameScene::renderMainCar(MainPlayer& player) {
     QGraphicsPixmapItem* car = player.getPixmap();
     QPointF currPos = car->scenePos();
     qreal x = currPos.x();
-    quint32 newX= map[player.laneNo];
-    if(qAbs(x-newX) > 0.1)
-    {
-
-        car->setPos(map[player.laneNo], sceneHeight-300);
-    }
+    x = qMax(x, (qreal)map[LANE_LEFT]);
+    x = qMin(x, (qreal)map[LANE_RIGHT]);
+    // player.setCoords(QPoint(x, currPos.x*))
+    player.setImage();
     if(!car->scene())
     {
+        player.setCoords(QPoint(map[LANE_CENTER], sceneHeight-300));
         addItem(car);
     }
 }

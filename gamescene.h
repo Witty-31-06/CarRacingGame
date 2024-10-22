@@ -21,7 +21,7 @@ private:
     quint16 sceneHeight;
     QVector<QPixmap> entities;  // List of available entities
     QList<Obstacles *> activeObstacles;  // List of currently spawned obstacles
-    QHash<Region, quint32> map;
+    QHash<Region, qreal> map;
     quint32 speed;
 public:
 

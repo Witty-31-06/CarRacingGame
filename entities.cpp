@@ -1,7 +1,7 @@
 #include "entities.h"
 
 Entity::Entity(QString path) {
-    QPixmap pic = QPixmap(path);
+    QPixmap pic = QPixmap(path).scaled(250,250,Qt::KeepAspectRatio, Qt::SmoothTransformation);
     image = new QGraphicsPixmapItem(pic);
     xlen = pic.width();
     this->ylen = pic.height();

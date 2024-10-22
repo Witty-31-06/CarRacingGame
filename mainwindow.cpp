@@ -32,33 +32,36 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     if (event->key() == Qt::Key_A) {
 
-        switch(player.laneNo) {
-        case LANE_CENTER:
-        case LANE_LEFT:
-            player.laneNo = LANE_LEFT;
-            break;
+        // switch(player.laneNo) {
+        // case LANE_CENTER:
+        // case LANE_LEFT:
+        //     player.laneNo = LANE_LEFT;
+        //     break;
 
 
-        case LANE_RIGHT:
-            player.laneNo = LANE_CENTER;
-            break;
-        default:
-            break;
-        }
+        // case LANE_RIGHT:
+        //     player.laneNo = LANE_CENTER;
+        //     break;
+        // default:
+        //     break;
+        // }
+
+        player.moveHorizontally(-20);
 
     }
     else if (event->key() == Qt::Key_D) {
-        switch(player.laneNo) {
-        case LANE_CENTER:
-        case LANE_RIGHT:
-            player.laneNo = LANE_RIGHT;
-            break;
-        case LANE_LEFT:
-            player.laneNo = LANE_CENTER;
-            break;
-        default:
-            break;
-        }
+        // switch(player.laneNo) {
+        // case LANE_CENTER:
+        // case LANE_RIGHT:
+        //     player.laneNo = LANE_RIGHT;
+        //     break;
+        // case LANE_LEFT:
+        //     player.laneNo = LANE_CENTER;
+        //     break;
+        // default:
+        //     break;
+        // }
+        player.moveHorizontally(+20); //towards right
     }
 
 }
