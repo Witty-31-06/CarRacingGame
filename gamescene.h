@@ -38,6 +38,7 @@ public:
 signals:
     void updateLives(int lives);
     void gameOver();
+    void updateScore();
 };
 
 #endif // GAMESCENE_H

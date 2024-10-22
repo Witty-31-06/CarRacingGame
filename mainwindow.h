@@ -33,13 +33,16 @@ public:
 
     void updateLives(int lives);
     void gameOver();
-protected:
+    void updateScore();
+    protected:
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 private slots:
     void on_resetButton_clicked();
 
     void on_startButton_clicked();
+
+    void on_pauseButton_clicked();
 
 private:
     Ui::MainWindow *ui;

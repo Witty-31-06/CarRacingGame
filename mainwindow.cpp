@@ -108,6 +108,7 @@ void MainWindow::drawGameScene() {
 
     connect(base, &gameScene::updateLives, this, &MainWindow::updateLives);
     connect(base, &gameScene::gameOver, this, &MainWindow::gameOver);
+    connect(base, &gameScene::updateScore, this, &MainWindow::updateScore);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
@@ -124,17 +125,28 @@ void MainWindow::game_loop() {
     ui->gameWindow->setScene(base);
 }
 
+void MainWindow::updateScore()
+{
+    ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));
+}
+void MainWindow::on_pauseButton_clicked()
+{
+    if(timer->isActive()) timer->stop();
+    else timer->start();
 
+    if(spawnTimer->isActive()) spawnTimer->stop();
+    else spawnTimer->start();
+}
 void MainWindow::updateLives(int lives) {
     ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(lives));
-    // if(lives>0)
-    // {
-    //     timer->stop();
-    //     spawnTimer->stop();
-    //     QMessageBox::information(this, "Life Lost", "You have lost a life");
-    //     timer->start();
-    //     spawnTimer->start();
-    // }
+    if(lives>0)
+    {
+        timer->stop();
+        spawnTimer->stop();
+        QMessageBox::information(this, "Life Lost", QString("You have lost a life. ") + QString::number(player.lives) + QString(" Lives Left"));
+        timer->start();
+        spawnTimer->start();
+    }
 }
 
 void MainWindow::gameOver() {

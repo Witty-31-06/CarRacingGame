@@ -155,7 +155,8 @@ void gameScene::renderObstacles(MainPlayer &player) {
         }
         else if(obstacle->isOutOfBounds(sceneHeight)) {
             removeItem(pic);
-
+            player.score++;
+            emit updateScore();
             it = activeObstacles.erase(it);
         } else {
             it++;
