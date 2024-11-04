@@ -6,9 +6,9 @@
 
 gameScene::gameScene(int w, int h, int fps, QVector<QPixmap> q) {
     entities = q;
-    laneDividerFraction = 0.01;
-    laneFraction =  0.13;
-    greeneriesFraction = 0.3;
+    laneDividerFraction = 0.01f;
+    laneFraction =  0.13f;
+    greeneriesFraction = 0.3f;
     sceneHeight = h;
     sceneWidth = w;
     this->fps = fps;
@@ -122,7 +122,7 @@ void gameScene::spawnObstacle() {
 
 
     //Choosing random spawn y coords
-    int ycoord = -100 - QRandomGenerator::global()->bounded(50);
+    int ycoord = -300 - QRandomGenerator::global()->bounded(50);
     obstacle->setCoords(QPoint(map[randomLane], ycoord));
     activeObstacles.append(obstacle);
 

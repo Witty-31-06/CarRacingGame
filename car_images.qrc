@@ -5,5 +5,9 @@
         <file>car_game/red_car.png</file>
         <file>car_game/pink_car.png</file>
         <file>car_game/main_car.png</file>
+        <file>car_game/tree_4.png</file>
+        <file>car_game/tree_3.png</file>
+        <file>car_game/tree_2.png</file>
+        <file>car_game/tree_1.png</file>
     </qresource>
 </RCC>

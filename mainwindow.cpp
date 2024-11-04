@@ -21,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(player.lives));
+
+    ui->livesLabel->setText(QString("Lives: ") + QString("❤️  ").repeated(player.lives));
     ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));
 
 
