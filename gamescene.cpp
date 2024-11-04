@@ -70,30 +70,82 @@ void gameScene::drawRoadBoundaries() {
     // Draw right boundary
     QGraphicsLineItem *rightBoundary = addLine(rightBoundaryX, 0, rightBoundaryX, sceneHeight, QPen(Qt::black));
 }
+
 void gameScene::drawRoadStrips() {
-
-
     int greeneriesWidth = sceneWidth * greeneriesFraction;
     int roadBoundaryLeft = greeneriesWidth;
-    int roadBoundaryRight = sceneWidth-greeneriesWidth;
-    int roadWidth = sceneWidth - (2 * greeneriesWidth) - 2;
-    int laneWidth = laneFraction*sceneWidth;
-    int dividerWidth = laneDividerFraction*sceneWidth;
+    int roadBoundaryRight = sceneWidth - greeneriesWidth;
+    int laneWidth = laneFraction * sceneWidth;
+    int dividerWidth = laneDividerFraction * sceneWidth;
 
-    int dividerLeftX = roadBoundaryLeft + laneWidth + dividerWidth/2;
+    int dividerLeftX = roadBoundaryLeft + laneWidth + dividerWidth / 2;
     int dividerRightX = roadBoundaryRight - (laneWidth + dividerWidth / 2);
 
-    divider1 = dividerLeftX;
-    divider2 = dividerRightX;
     QPen dashedPen(Qt::white, dividerWidth);
-    dashedPen.setStyle(Qt::DashLine);
+    dashedPen.setStyle(Qt::SolidLine);
 
-    dashedPen.setDashPattern(QVector<qreal>() << 5 << 4);
+    int segmentHeight = 40; // Height of each strip segment
+    int gap = 60; // Space between segments
 
-    addLine(dividerLeftX, 0, dividerLeftX, sceneHeight, dashedPen);
+    // Create dashed segments for left divider
+    for (int y = 0; y < sceneHeight; y += segmentHeight + gap) {
+        QGraphicsLineItem* segment = addLine(dividerLeftX, y, dividerLeftX, y + segmentHeight, dashedPen);
+        dividerLeft.append(segment);
+    }
 
-    addLine(dividerRightX, 0, dividerRightX, sceneHeight, dashedPen);
+    // Create dashed segments for right divider
+    for (int y = 0; y < sceneHeight; y += segmentHeight + gap) {
+        QGraphicsLineItem* segment = addLine(dividerRightX, y, dividerRightX, y + segmentHeight, dashedPen);
+        dividerRight.append(segment);
+    }
 }
+
+
+
+void gameScene::updateRoadStrips() {
+    for (QGraphicsLineItem* segment : dividerLeft) {
+        // Move segment down
+        qreal newY = segment->line().y1() + displacement_per_frame;
+
+        // If it goes off-screen, reset to the top
+        if (newY > sceneHeight) {
+            newY = -segment->line().length(); // Reset to just above the top
+        }
+
+        segment->setLine(segment->line().x1(), newY, segment->line().x2(), newY + segment->line().length());
+    }
+
+    for (QGraphicsLineItem* segment : dividerRight) {
+        // Move segment down
+        qreal newY = segment->line().y1() + displacement_per_frame;
+
+        // If it goes off-screen, reset to the top
+        if (newY > sceneHeight) {
+            newY = -segment->line().length();
+        }
+
+        segment->setLine(segment->line().x1(), newY, segment->line().x2(), newY + segment->line().length());
+    }
+}
+
+
+
+
+QRectF gameScene::getRoadBoundary() const {
+    // Calculate greeneries width based on the fraction
+    int greeneriesWidth = sceneWidth * greeneriesFraction;
+
+    // Calculate road boundaries
+    int roadWidth = sceneWidth - (2 * greeneriesWidth);  // Total road width, excluding greeneries
+    int roadBoundaryLeft = greeneriesWidth;  // Left boundary starts after greeneries
+    int roadBoundaryRight = roadBoundaryLeft + roadWidth;  // Right boundary is after the road width
+
+    // Return the rectangle representing the road
+    return QRectF(roadBoundaryLeft, 0,
+                  roadWidth,
+                  sceneHeight);
+}
+
 
 
 void gameScene::renderMainCar(MainPlayer& player) {
@@ -162,6 +214,9 @@ void gameScene::renderObstacles(MainPlayer &player) {
         }
     }
 }
+
+
+
 
 
 

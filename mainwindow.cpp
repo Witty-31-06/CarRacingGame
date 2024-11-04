@@ -31,7 +31,23 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 
+    QRectF roadBoundary = base->getRoadBoundary();
+    QPointF playerPos = player.coords;
+
+
     if (event->key() == Qt::Key_A) {
+        if (playerPos.x() - 20 >= roadBoundary.left()) {
+            player.moveHorizontally(-20);
+        }
+    }
+    else if (event->key() == Qt::Key_D) {  // Move right
+        if (playerPos.x() + 30 <= roadBoundary.right() - player.xlen ) { //getting issue in width
+            player.moveHorizontally(+20);
+        }
+    }
+
+
+    //if (event->key() == Qt::Key_A) {
 
         // switch(player.laneNo) {
         // case LANE_CENTER:
@@ -47,10 +63,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         //     break;
         // }
 
-        player.moveHorizontally(-20);
+        //player.moveHorizontally(-20);
 
-    }
-    else if (event->key() == Qt::Key_D) {
+    //}
+    //else if (event->key() == Qt::Key_D) {
         // switch(player.laneNo) {
         // case LANE_CENTER:
         // case LANE_RIGHT:
@@ -62,8 +78,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         // default:
         //     break;
         // }
-        player.moveHorizontally(+20); //towards right
-    }
+        //player.moveHorizontally(+20); //towards right
+    //}
 
 }
 MainWindow::~MainWindow()
@@ -123,6 +139,7 @@ void MainWindow::game_loop() {
 
     base->renderMainCar(player);
     base->renderObstacles(player);
+    base->updateRoadStrips();
     // base->renderGreeneries();
 
 

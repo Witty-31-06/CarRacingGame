@@ -21,7 +21,8 @@ private:
     quint16 sceneHeight;
     QVector<QPixmap> entities;  // List of available entities
     QList<Obstacles *> activeObstacles;  // List of currently spawned obstacles
-
+    QList<QGraphicsLineItem*> dividerLeft;
+    QList<QGraphicsLineItem*> dividerRight;
     QHash<Region, qreal> map;
     quint32 speed;
 public:
@@ -35,7 +36,8 @@ public:
     void renderObstacles(MainPlayer&);
     void renderGreeneries();
     void spawnObstacle();
-
+    QRectF getRoadBoundary() const;
+    void updateRoadStrips();
 signals:
     void updateLives(int lives);
     void gameOver();
