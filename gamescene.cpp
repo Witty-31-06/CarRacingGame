@@ -4,8 +4,9 @@
 #include <QRandomGenerator>
 
 
-gameScene::gameScene(int w, int h, int fps, QVector<QPixmap> q) {
-    entities = q;
+gameScene::gameScene(int w, int h, int fps, QVector<QPixmap> cars, QVector<QPixmap> trees) {
+    entities = cars;
+    this->trees = trees;
     laneDividerFraction = 0.01f;
     laneFraction =  0.13f;
     greeneriesFraction = 0.3f;
@@ -35,6 +36,8 @@ gameScene::gameScene(int w, int h, int fps, QVector<QPixmap> q) {
     map[LANE_CENTER] = (divider1+divider2)/2 - 65;
     map[LANE_RIGHT] = (divider2 + roadBoundary2)/2 -65;
     map[LANE_LEFT] = (roadBoundary1 + divider1)/2 -65;
+    map[LEFT_GREEN] = (roadBoundary1 + 0)/2.0-200;
+    map[RIGHT_GREEN] = (roadBoundary2 + sceneWidth)/2.0-200;
     setBackgroundBrush(QBrush(QColor(169, 169, 169)));
     //30----10----5----10----5----10----30
 
@@ -163,6 +166,43 @@ void gameScene::renderMainCar(MainPlayer& player) {
     }
 }
 
+void gameScene::spawnTrees() {
+    //Choosing a random Obstacle
+    QPixmap entity = trees[QRandomGenerator::global()->bounded(trees.size())];
+    Greeneries* tree = new Greeneries(entity);
+
+    //Choosing a random lane
+    Region randomLane = (Region)(3 + QRandomGenerator::global()->bounded(2));
+
+
+    //Choosing random spawn y coords
+    int ycoord = -300 - QRandomGenerator::global()->bounded(50);
+    tree->setCoords(QPoint(map[randomLane], ycoord));
+    activeTrees.append(tree);
+}
+
+void gameScene::renderGreeneries() {
+
+
+    for(auto it = activeTrees.begin(); it != activeTrees.end();) {
+        Greeneries* tree = *it;
+        QGraphicsPixmapItem *pic = tree->getPixmap();
+        tree->moveDown(displacement_per_frame);
+        pic->setPos(tree->coords);
+        if(!pic->scene())
+        {
+
+            addItem(pic);
+        }
+        else if(tree->isOutOfBounds(sceneHeight)) {
+            removeItem(pic);
+
+            it = activeTrees.erase(it);
+        } else {
+            it++;
+        }
+    }
+}
 void gameScene::spawnObstacle() {
 
     //Choosing a random Obstacle
@@ -177,7 +217,6 @@ void gameScene::spawnObstacle() {
     int ycoord = -300 - QRandomGenerator::global()->bounded(50);
     obstacle->setCoords(QPoint(map[randomLane], ycoord));
     activeObstacles.append(obstacle);
-
 }
 void gameScene::renderObstacles(MainPlayer &player) {
 
@@ -214,7 +253,6 @@ void gameScene::renderObstacles(MainPlayer &player) {
         }
     }
 }
-
 
 
 

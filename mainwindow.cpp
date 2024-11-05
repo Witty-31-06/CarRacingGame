@@ -18,6 +18,32 @@ MainWindow::MainWindow(QWidget *parent)
     entities.push_back(QPixmap(":/car_game/white_car.png"));
     entities.push_back(QPixmap(":/car_game/yellow_car.png"));
 
+    int scalePercentage = 80; // Replace 'x' with the desired percentage (e.g., 50 for 50%)
+
+    greeneries.push_back(QPixmap(":/car_game/tree_1.png").scaled(
+        QPixmap(":/car_game/tree_1.png").width() * scalePercentage / 100,
+        QPixmap(":/car_game/tree_1.png").height() * scalePercentage / 100,
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation));
+
+    greeneries.push_back(QPixmap(":/car_game/tree_2.png").scaled(
+        QPixmap(":/car_game/tree_2.png").width() * scalePercentage / 100,
+        QPixmap(":/car_game/tree_2.png").height() * scalePercentage / 100,
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation));
+
+    greeneries.push_back(QPixmap(":/car_game/tree_3.png").scaled(
+        QPixmap(":/car_game/tree_3.png").width() * scalePercentage / 100,
+        QPixmap(":/car_game/tree_3.png").height() * scalePercentage / 100,
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation));
+
+    greeneries.push_back(QPixmap(":/car_game/tree_4.png").scaled(
+        QPixmap(":/car_game/tree_4.png").width() * scalePercentage / 100,
+        QPixmap(":/car_game/tree_4.png").height() * scalePercentage / 100,
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation));
+
 
 
 
@@ -97,11 +123,13 @@ void MainWindow::on_startButton_clicked() {
     drawGameScene();
     timer = new QTimer(this);
     spawnTimer = new QTimer(this);
-
+    treeTimer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::game_loop);
     connect(spawnTimer, &QTimer::timeout, base, &gameScene::spawnObstacle);
+    connect(treeTimer, &QTimer::timeout, base, &gameScene::spawnTrees);
     timer->start(1000/fps);
     spawnTimer->start(1500);
+    treeTimer->start(1000);
     ui->gameWindow->setScene(base);
 }
 
@@ -114,7 +142,7 @@ void MainWindow::drawGameScene() {
     ui->gameWindow->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Create a new gameScene instance and set its dimensions
-    gameScene *scene = new gameScene(width, height, fps,entities);
+    gameScene *scene = new gameScene(width, height, fps,entities, greeneries);
     ui->gameWindow->setScene(scene);
 
     // Set the scene rect to match the viewport size
@@ -140,7 +168,7 @@ void MainWindow::game_loop() {
     base->renderMainCar(player);
     base->renderObstacles(player);
     base->updateRoadStrips();
-    // base->renderGreeneries();
+    base->renderGreeneries();
 
 
     ui->gameWindow->setScene(base);
@@ -152,11 +180,19 @@ void MainWindow::updateScore()
 }
 void MainWindow::on_pauseButton_clicked()
 {
-    if(timer->isActive()) timer->stop();
-    else timer->start();
+    if(timer->isActive()){
+        ui->pauseButton->setText("Resume");
+        timer->stop();
+    }
+    else{ timer->start();
+    ui->pauseButton->setText("Pause");
+    }
 
     if(spawnTimer->isActive()) spawnTimer->stop();
     else spawnTimer->start();
+
+    if(treeTimer->isActive()) treeTimer->stop();
+    else treeTimer->start();
 }
 void MainWindow::updateLives(int lives) {
     ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(lives));

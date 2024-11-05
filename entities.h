@@ -10,7 +10,8 @@ enum Region {
     LANE_LEFT,
     LANE_CENTER,
     LANE_RIGHT,
-    OUTSIDE_ROAD
+    LEFT_GREEN,
+    RIGHT_GREEN
 };
 
 class Entity {

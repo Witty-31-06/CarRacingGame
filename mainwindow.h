@@ -25,6 +25,7 @@ public:
 
     MainPlayer player;
     QVector<QPixmap> entities;
+    QVector<QPixmap> greeneries;
     gameScene* base;
     void drawGameScene();
     void game_loop();
@@ -49,5 +50,6 @@ private:
     QTimer* timer;
     QTimer *spawnTimer;
     // bool eventFilter(QObject *object, QEvent *event);
+    QTimer *treeTimer;
 };
 #endif // MAINWINDOW_H
