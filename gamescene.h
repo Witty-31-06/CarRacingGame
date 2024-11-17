@@ -10,6 +10,8 @@ class gameScene: public QGraphicsScene
 {
     Q_OBJECT
 private:
+
+
     float laneFraction;
     float laneDividerFraction;
     float greeneriesFraction;
@@ -25,8 +27,22 @@ private:
     QList<Greeneries *> activeTrees;
     QList<QGraphicsLineItem*> dividerLeft;
     QList<QGraphicsLineItem*> dividerRight;
+    QGraphicsTextItem *score;
+    QGraphicsTextItem *lives;
     QHash<Region, qreal> map;
     quint32 speed;
+
+
+
+    QString livesHtml = QString("<div style='color: white; font-size: 16px; font-weight: bold;'>"
+                                "Lives: <span style='color: red'> %1 </span>"
+                                "</div>");
+
+    QString scoreHtml = QString("<div style='color: white; font-size: 14px;'>"
+                                "Score: <b>%1</b>"
+                                "</div>");
+    void updateLives(int lives);
+    void updateScore(int );
 public:
 
     gameScene(int w, int h, int fps, QVector<QPixmap> , QVector<QPixmap>);
@@ -43,9 +59,9 @@ public:
     void spawnTrees();
 
 signals:
-    void updateLives(int lives);
+    void updateLife(int life);
     void gameOver();
-    void updateScore();
+
 };
 
 

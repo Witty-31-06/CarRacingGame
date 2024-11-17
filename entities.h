@@ -34,14 +34,13 @@ public:
     inline void moveHorizontally(qint32 displacement) {
 
         coords = QPoint(coords.x() + displacement, coords.y());
-        qDebug()<<coords;
+
     }
     inline void setImage() {
         image->setPos(coords);
     }
     inline bool isOutOfBounds(quint32 sceneHeight) {
-        // qDebug()<<(coords.y() - ylen)<<sceneHeight;
-        return (coords.y() - ylen) > (qint32)sceneHeight ;
+        return (coords.y()) > (qint32)sceneHeight ;
     }
     inline void setCoords(QPoint c) {
         coords = c;

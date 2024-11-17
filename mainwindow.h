@@ -30,16 +30,12 @@ public:
     void drawGameScene();
     void game_loop();
 
-
-
-    void updateLives(int lives);
     void gameOver();
-    void updateScore();
-    protected:
+    void notify_life_lost(const int lives);
+protected:
     void keyPressEvent(QKeyEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 private slots:
-    void on_resetButton_clicked();
 
     void on_startButton_clicked();
 

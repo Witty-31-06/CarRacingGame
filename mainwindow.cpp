@@ -44,14 +44,6 @@ MainWindow::MainWindow(QWidget *parent)
         Qt::KeepAspectRatio,
         Qt::SmoothTransformation));
 
-
-
-
-
-    ui->livesLabel->setText(QString("Lives: ") + QString("❤️  ").repeated(player.lives));
-    ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));
-
-
     base=nullptr;
 }
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -72,52 +64,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         }
     }
 
-
-    //if (event->key() == Qt::Key_A) {
-
-        // switch(player.laneNo) {
-        // case LANE_CENTER:
-        // case LANE_LEFT:
-        //     player.laneNo = LANE_LEFT;
-        //     break;
-
-
-        // case LANE_RIGHT:
-        //     player.laneNo = LANE_CENTER;
-        //     break;
-        // default:
-        //     break;
-        // }
-
-        //player.moveHorizontally(-20);
-
-    //}
-    //else if (event->key() == Qt::Key_D) {
-        // switch(player.laneNo) {
-        // case LANE_CENTER:
-        // case LANE_RIGHT:
-        //     player.laneNo = LANE_RIGHT;
-        //     break;
-        // case LANE_LEFT:
-        //     player.laneNo = LANE_CENTER;
-        //     break;
-        // default:
-        //     break;
-        // }
-        //player.moveHorizontally(+20); //towards right
-    //}
-
 }
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-void MainWindow::on_resetButton_clicked()
-{
-
-}
-
 
 void MainWindow::on_startButton_clicked() {
     drawGameScene();
@@ -154,9 +105,8 @@ void MainWindow::drawGameScene() {
 
     base = scene;
 
-    connect(base, &gameScene::updateLives, this, &MainWindow::updateLives);
     connect(base, &gameScene::gameOver, this, &MainWindow::gameOver);
-    connect(base, &gameScene::updateScore, this, &MainWindow::updateScore);
+    connect(base, &gameScene::updateLife, this, &MainWindow::notify_life_lost);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
@@ -174,10 +124,7 @@ void MainWindow::game_loop() {
     ui->gameWindow->setScene(base);
 }
 
-void MainWindow::updateScore()
-{
-    ui->scoreLabel->setText(QString("Score: ") + QString::number(player.score));
-}
+
 void MainWindow::on_pauseButton_clicked()
 {
     if(timer->isActive()){
@@ -194,8 +141,7 @@ void MainWindow::on_pauseButton_clicked()
     if(treeTimer->isActive()) treeTimer->stop();
     else treeTimer->start();
 }
-void MainWindow::updateLives(int lives) {
-    ui->livesLabel->setText(QString("Lives: ") + QString("❤️ ").repeated(lives));
+void MainWindow::notify_life_lost(int lives) {
     if(lives>0)
     {
         timer->stop();

@@ -42,18 +42,47 @@ gameScene::gameScene(int w, int h, int fps, QVector<QPixmap> cars, QVector<QPixm
     //30----10----5----10----5----10----30
 
 
+    lives = new QGraphicsTextItem();
+    score = new QGraphicsTextItem();
 
+
+    QString scoreHtml = "<div style='color: blue; font-size: 14px;'>"
+                        "Score: <b>0</b>"
+                        "</div>";
+    QString livesHtml = "<div style='color: white; font-size: 16px; font-weight: bold;'>"
+                        "Lives:<span style='color: red'> ❤️ ❤️ ❤️ </span>"
+                        "</div>";
+    score->setTextInteractionFlags(Qt::NoTextInteraction);
+    lives->setTextInteractionFlags(Qt::NoTextInteraction); // Prevent text editing
+
+    lives->setHtml(livesHtml);
+    score->setHtml(scoreHtml);
+
+
+    this->addItem(lives);
+    this->addItem(score);
+
+
+    QRectF livesRect = lives->boundingRect();
+    QRectF scoreRect = score->boundingRect();
+
+
+    const int margin = 10;
+    QPointF livesPosition = QPointF(sceneWidth - livesRect.width() - margin, 0);
+    QPointF scorePosition = QPointF(sceneWidth - livesRect.width() - margin,  livesPosition.y() + livesRect.height());
+
+    lives->setPos(livesPosition);
+    score->setPos(scorePosition);
+    lives->setZValue(1);
+    score->setZValue(1);
 
 
 }
 void gameScene::drawGreeneries() {
-    // Calculate scene width and height
 
-
-    // Calculate greeneries width based on the fraction
     quint32 greeneriesWidth = sceneWidth * greeneriesFraction;
     roadBoundary1 = greeneriesWidth;
-    // Left greenery (as a rectangle)
+
     addRect(0, 0, greeneriesWidth, sceneHeight, QPen(Qt::green), QBrush(Qt::green));
 
     roadBoundary2 = sceneWidth - greeneriesWidth;
@@ -68,10 +97,10 @@ void gameScene::drawRoadBoundaries() {
     int rightBoundaryX = greeneriesWidth + roadWidth;
 
     // Draw left boundary
-    QGraphicsLineItem *leftBoundary = addLine(leftBoundaryX, 0, leftBoundaryX, sceneHeight, QPen(Qt::black));
+    addLine(leftBoundaryX, 0, leftBoundaryX, sceneHeight, QPen(Qt::black));
 
     // Draw right boundary
-    QGraphicsLineItem *rightBoundary = addLine(rightBoundaryX, 0, rightBoundaryX, sceneHeight, QPen(Qt::black));
+    addLine(rightBoundaryX, 0, rightBoundaryX, sceneHeight, QPen(Qt::black));
 }
 
 void gameScene::drawRoadStrips() {
@@ -233,7 +262,8 @@ void gameScene::renderObstacles(MainPlayer &player) {
 
         if (pic->collidesWithItem(player.getPixmap())) {
             player.lives -= 1;
-            emit updateLives(player.lives);
+            updateLives(player.lives);
+            emit updateLife(player.lives);
 
             if (player.lives <= 0) {
                 emit gameOver();
@@ -245,8 +275,8 @@ void gameScene::renderObstacles(MainPlayer &player) {
         }
         else if(obstacle->isOutOfBounds(sceneHeight)) {
             removeItem(pic);
-            player.score++;
-            emit updateScore();
+                player.score++;
+                updateScore(player.score);
             it = activeObstacles.erase(it);
         } else {
             it++;
@@ -255,7 +285,16 @@ void gameScene::renderObstacles(MainPlayer &player) {
 }
 
 
+void gameScene::updateLives(const int live) {
+    livesHtml = livesHtml.arg(QString("❤️ ").repeated(live));
+    lives->setHtml(livesHtml);
+}
 
+void gameScene::updateScore(const int pscore)
+{
+    scoreHtml = scoreHtml.arg(QString::number(pscore));
+    score->setHtml(scoreHtml);
+}
 
 
 
