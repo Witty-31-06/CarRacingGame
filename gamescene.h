@@ -34,11 +34,11 @@ private:
 
 
 
-    QString livesHtml = QString("<div style='color: white; font-size: 16px; font-weight: bold;'>"
+    QString livesHtml = QString("<div style='color: white; font-size: 20px; font-weight: bold;'>"
                                 "Lives: <span style='color: red'> %1 </span>"
                                 "</div>");
 
-    QString scoreHtml = QString("<div style='color: white; font-size: 14px;'>"
+    QString scoreHtml = QString("<div style='color: white; font-size: 20px;'>"
                                 "Score: <b>%1</b>"
                                 "</div>");
     void updateLives(int lives);

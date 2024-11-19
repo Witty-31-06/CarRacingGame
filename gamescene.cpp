@@ -46,10 +46,10 @@ gameScene::gameScene(int w, int h, int fps, QVector<QPixmap> cars, QVector<QPixm
     score = new QGraphicsTextItem();
 
 
-    QString scoreHtml = "<div style='color: blue; font-size: 14px;'>"
+    QString scoreHtml = "<div style='color: blue; font-size: 20px;'>"
                         "Score: <b>0</b>"
                         "</div>";
-    QString livesHtml = "<div style='color: white; font-size: 16px; font-weight: bold;'>"
+    QString livesHtml = "<div style='color: white; font-size: 20px; font-weight: bold;'>"
                         "Lives:<span style='color: red'> ❤️ ❤️ ❤️ </span>"
                         "</div>";
     score->setTextInteractionFlags(Qt::NoTextInteraction);
@@ -292,8 +292,8 @@ void gameScene::updateLives(const int live) {
 
 void gameScene::updateScore(const int pscore)
 {
-    scoreHtml = scoreHtml.arg(QString::number(pscore));
-    score->setHtml(scoreHtml);
+    QString scoreHtml1 = scoreHtml.arg(QString::number(pscore));
+    score->setHtml(scoreHtml1);
 }
 
 
